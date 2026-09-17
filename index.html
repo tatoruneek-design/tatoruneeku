@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pop Tarot Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #fef8c6;
+      --panel-bg: #ffffff;
+      --main-purple: #705fa9;
+      --accent-pink: #f896b3;
+      --accent-yellow: #f8db66;
+      --text-dark: #332244;
+      --border-dark: #332244;
+    }
+
+    body {
+      margin: 0;
+      padding: 30px 15px;
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .header-area {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    h1 {
+      font-family: 'Fredoka', sans-serif;
+      color: var(--main-purple);
+      font-size: 2.2rem;
+      margin: 0;
+      text-shadow: 3px 3px 0px var(--accent-pink);
+    }
+    .subtitle {
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .pop-frame {
+      background: var(--panel-bg);
+      border: 3px solid var(--border-dark);
+      border-radius: 20px;
+      padding: 25px 20px;
+      max-width: 700px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 25px;
+      box-shadow: 6px 6px 0px var(--main-purple);
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      color: var(--main-purple);
+      margin-top: 0;
+      border-bottom: 3px solid var(--bg-cream);
+      padding-bottom: 10px;
+    }
+
+    /* 過去・現在のタイムラインエリア */
+    .timeline-display {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 25px 0;
+      flex-wrap: wrap;
+    }
+
+    .card-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 160px;
+    }
+
+    .slot-badge {
+      background: var(--main-purple);
+      color: #fff;
+      border: 2px solid var(--border-dark);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      box-shadow: 2px 2px 0px var(--border-dark);
+    }
+
+    /* こだわりのグラフィックカード */
+    .tarot-card {
+      width: 160px;
+      height: 270px;
+      background: #fdfaf0;
+      border: 3px solid var(--border-dark);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px;
+      box-sizing: border-box;
+      position: relative;
+      box-shadow: 4px 4px 0px var(--accent-pink);
+    }
+
+    /* カード内の幾何学デザイン飾り */
+    .card-inner-frame {
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--border-dark);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 6px;
+      box-sizing: border-box;
+      background-image: 
+        radial-gradient(circle at 10% 10%, var(--accent-pink) 2px, transparent 2px),
+        radial-gradient(circle at 90% 10%, var(--accent-pink) 2px, transparent 2px),
+        radial-gradient(circle at 10% 90%, var(--accent-pink) 2px, transparent 2px),
+        radial-gradient(circle at 90% 90%, var(--accent-pink) 2px, transparent 2px);
+    }
+
+    .card-graphic {
+      width: 100%;
+      height: 140px;
+      background: #f1e7fe;
+      border: 2px solid var(--border-dark);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-graphic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-info {
+      text-align: center;
+      width: 100%;
+      background: var(--main-purple);
+      border: 2px solid var(--border-dark);
+      border-radius: 6px;
+      padding: 4px 2px;
+      color: #fff;
+    }
+
+    .card-num {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent-yellow);
+    }
+
+    .card-title-en {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .card-title-jp {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--accent-pink);
+    }
+
+    .detail-box {
+      background: #f1e7fe;
+      border: 3px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .reading-section {
+      margin-bottom: 10px;
+    }
+
+    .reading-title {
+      color: var(--main-purple);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    button {
+      background: var(--accent-pink);
+      color: var(--text-dark);
+      border: 3px solid var(--border-dark);
+      padding: 12px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 800;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      width: 100%;
+      box-shadow: 3px 3px 0px var(--border-dark);
+      transition: all 0.1s ease;
+    }
+    button:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px var(--border-dark);
+    }
+
+    .input-group { margin-top: 15px; }
+    label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--main-purple);
+      display: block;
+      margin-bottom: 6px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 2px solid var(--border-dark);
+      border-radius: 10px;
+      font-weight: bold;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+    }
+    input[type="file"] { display: none; }
+    .file-label {
+      display: block;
+      padding: 12px;
+      background: #fff;
+      border: 2px dashed var(--border-dark);
+      text-align: center;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .saved-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+      justify-items: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-area">
+    <h1>POP TAROT LAB</h1>
+    <div class="subtitle">✦ 過去と現在を映し、新しいアイデアを生み出すノート ✦</div>
+  </div>
+
+  <div class="pop-frame">
+    <h2>✦ 過去と現在を占う（2枚引き）</h2>
+    <button id="draw-btn">カードを2枚ひいて占う！</button>
+
+    <div class="timeline-display" id="drawn-cards">
+      <!-- 占い結果スロット -->
+    </div>
+
+    <div id="creation-area" style="display:none;">
+      <div class="detail-box">
+        <div class="reading-section">
+          <div class="reading-title">⏳ 過去からの背景:</div>
+          <div id="past-detail">─</div>
+        </div>
+        <div class="reading-section" style="margin-top: 10px;">
+          <div class="reading-title">✨ 現在の状況と課題:</div>
+          <div id="present-detail">─</div>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label>合成カードの名前（オリジナル）：</label>
+        <input type="text" id="card-name-input" placeholder="例: 過去を越えたネコ騎士">
+      </div>
+
+      <div class="input-group">
+        <label>カードのイラスト（画像アップロード）：</label>
+        <label for="image-input" class="file-label" id="file-label">自作イラストを選ぶ</label>
+        <input type="file" id="image-input" accept="image/*">
+      </div>
+
+      <button id="save-btn" style="margin-top: 20px; background: var(--accent-yellow);">ノートに保存する！</button>
+    </div>
+  </div>
+
+  <div class="pop-frame">
+    <h2>✦ つくったオリジナルカード集</h2>
+    <div class="saved-grid" id="saved-cards"></div>
+  </div>
+
+<script>
+  // 22枚の大アルカナ（日本語名・英語名・詳しい意味）
+  const majorArcana = [
+    { num: "0", nameEn: "THE FOOL", nameJp: "愚者", symbol: "🎒", detail: "恐れを知らない自由さ。過去の縛りを捨て、まっさらな気持ちで新しい一歩を踏み出す暗示。" },
+    { num: "I", nameEn: "MAGICIAN", nameJp: "魔術師", symbol: "🪄", detail: "すべての準備が整った状態。自信を持って新しいアイデアや企画をスタートさせるタイミング。" },
+    { num: "II", nameEn: "HIGH PRIESTESS", nameJp: "女教皇", symbol: "🌙", detail: "静かな直感と知性。表面的な言葉よりも自分の心の声やインスピレーションを信じるべき時。" },
+    { num: "III", nameEn: "EMPRESS", nameJp: "女帝", symbol: "👑", detail: "豊かさと優しさの満開。自分の手で生み出したものが愛され、育っていく祝福された状態。" },
+    { num: "IV", nameEn: "EMPEROR", nameJp: "皇帝", symbol: "🏛️", detail: "揺るぎないリーダーシップ。自分のルールを持ち、責任を持って物事をコントロールする力。" },
+    { num: "V", nameEn: "HIEROPHANT", nameJp: "教皇", symbol: "📜", detail: "伝統や導き手との出会い。信頼できるアドバイザーやルールに従うことで得られる安心感。" },
+    { num: "VI", nameEn: "THE LOVERS", nameJp: "恋人", symbol: "💖", detail: "心がときめく選択。直感的に「これが好き！」と思えるものを選び、調和を生み出す時。" },
+    { num: "VII", nameEn: "CHARIOT", nameJp: "戦車", symbol: "⚡", detail: "圧倒的なスピードと勝利。迷いを捨てて前だけを向き、目標に向かって突っ走る勢い。" },
+    { num: "VIII", nameEn: "STRENGTH", nameJp: "力", symbol: "🦁", detail: "優しく強い不屈の心。力ずくではなく、絆と忍耐で困難を乗り越えていくしなやかさ。" },
+    { num: "IX", name: "HERMIT", nameJp: "隠者", symbol: "🕯️", detail: "じっくり自分と向き合う探求。喧騒を離れ、自分の内側にある「本当の答え」を探す時。" },
+    { num: "X", name: "WHEEL of FORTUNE", nameJp: "運命の輪", symbol: "🎡", detail: "運命的な大きなチャンス。予想外の展開や嬉しい変化の波に思い切って乗るタイミング。" },
+    { num: "XI", name: "JUSTICE", nameJp: "正義", symbol: "⚖️", detail: "冷静で公平な判断。感情に流されず、事実を見つめて誠実な決断を下すべき場面。" },
+    { num: "XII", name: "HANGED MAN", nameJp: "吊るされた男", symbol: "🙃", detail: "試練を通した視点の転換。動けない時間だからこそ見えてくる、新しい価値観と発見。" },
+    { num: "XIII", name: "DEATH", nameJp: "死神", symbol: "🦋", detail: "古いものの終わりと新しいスタート。一度リセットすることで、真の変容が始まる。" },
+    { num: "XIV", name: "TEMPERANCE", nameJp: "節制", symbol: "🧪", detail: "バランスの取れた調和。異なる要素をうまくブレンドし、心地よい循環を生み出す状態。" },
+    { num: "XV", name: "DEVIL", nameJp: "悪魔", symbol: "⛓️", detail: "断ち切れない執着や誘惑。囚われている感情に気づき、自分を解放することが課題。" },
+    { num: "XVI", name: "TOWER", nameJp: "塔", symbol: "⚡", detail: "電撃的な変化と覚醒。思い込みが壊れ、隠されていた本質が露わになる衝撃的な局面。" },
+    { num: "XVII", name: "THE STAR", nameJp: "星", symbol: "⭐", detail: "暗闇に輝く希望の光。夢や憧れに向かってまっすぐに進むことができる無垢な輝き。" },
+    { num: "XVIII", name: "THE MOON", nameJp: "月", symbol: "👁️", detail: "ミステリアスな胸騒ぎと幻影。先が見えない不安の中でも、感性を研ぎ澄ませる重要性。" },
+    { num: "XIX", name: "THE SUN", nameJp: "太陽", symbol: "☀️", detail: "溢れ出る祝福とエネルギー。隠し事のないオープンな喜びと、圧倒的な成功の象徴。" },
+    { num: "XX", name: "JUDGEMENT", nameJp: "審判", symbol: "🎺", detail: "過去の努力の報いと覚醒。一度諦めたことへの再挑戦や、奇跡的な復活のチャンス。" },
+    { num: "XXI", name: "THE WORLD", nameJp: "世界", symbol: "🌍", detail: "完璧なフィナーレと達成。すべてがひとつに繋がり、最高のハッピーエンドを迎える状態。" }
+  ];
+
+  let selectedCards = [];
+  let currentImageData = null;
+
+  const drawBtn = document.getElementById('draw-btn');
+  const drawnCardsDiv = document.getElementById('drawn-cards');
+  const creationArea = document.getElementById('creation-area');
+  const pastDetail = document.getElementById('past-detail');
+  const presentDetail = document.getElementById('present-detail');
+  const cardNameInput = document.getElementById('card-name-input');
+  const imageInput = document.getElementById('image-input');
+  const fileLabel = document.getElementById('file-label');
+  const saveBtn = document.getElementById('save-btn');
+  const savedCardsDiv = document.getElementById('saved-cards');
+
+  drawBtn.addEventListener('click', () => {
+    const shuffled = [...majorArcana].sort(() => 0.5 - Math.random());
+    selectedCards = [shuffled[0], shuffled[1]];
+
+    drawnCardsDiv.innerHTML = `
+      <div class="card-slot">
+        <div class="slot-badge">PAST / 過去</div>
+        <div class="tarot-card">
+          <div class="card-inner-frame">
+            <div class="card-graphic">${selectedCards[0].symbol}</div>
+            <div class="card-info">
+              <div class="card-num">${selectedCards[0].num}</div>
+              <div class="card-title-en">${selectedCards[0].nameEn}</div>
+              <div class="card-title-jp">${selectedCards[0].nameJp}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-slot">
+        <div class="slot-badge" style="background: var(--accent-pink); color: var(--text-dark);">PRESENT / 現在</div>
+        <div class="tarot-card">
+          <div class="card-inner-frame">
+            <div class="card-graphic">${selectedCards[1].symbol}</div>
+            <div class="card-info">
+              <div class="card-num">${selectedCards[1].num}</div>
+              <div class="card-title-en">${selectedCards[1].nameEn}</div>
+              <div class="card-title-jp">${selectedCards[1].nameJp}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    pastDetail.textContent = `【${selectedCards[0].nameJp}】 ${selectedCards[0].detail}`;
+    presentDetail.textContent = `【${selectedCards[1].nameJp}】 ${selectedCards[1].detail}`;
+    
+    creationArea.style.display = 'block';
+    cardNameInput.value = `${selectedCards[0].nameJp}から${selectedCards[1].nameJp}へ`;
+    currentImageData = null;
+    fileLabel.textContent = '自作イラストを選ぶ';
+    imageInput.value = '';
+  });
+
+  imageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      fileLabel.textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        currentImageData = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  saveBtn.addEventListener('click', () => {
+    const name = cardNameInput.value.trim();
+    if (!name) return alert('カード名を入力してください');
+
+    const newCard = {
+      name: name,
+      image: currentImageData,
+      date: new Date().toLocaleDateString()
+    };
+
+    const saved = JSON.parse(localStorage.getItem('pop_tarot_v2') || '[]');
+    saved.push(newCard);
+    localStorage.setItem('pop_tarot_v2', JSON.stringify(saved));
+
+    renderSavedCards();
+    alert('ノートに保存したよ！');
+  });
+
+  function renderSavedCards() {
+    const saved = JSON.parse(localStorage.getItem('pop_tarot_v2') || '[]');
+    savedCardsDiv.innerHTML = saved.map(card => `
+      <div class="tarot-card" style="height:220px;">
+        <div class="card-inner-frame">
+          <div class="card-graphic" style="height:120px;">
+            ${card.image ? `<img src="${card.image}">` : '✨'}
+          </div>
+          <div class="card-info">
+            <div class="card-title-jp">${card.name}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  renderSavedCards();
+</script>
+</body>
+</html>
